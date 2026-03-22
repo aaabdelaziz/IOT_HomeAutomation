@@ -44,14 +44,14 @@ Mobile App  ──MQTT/TLS──►  Broker (local Pi / cloud)  ──MQTT──
 
 | Feature                            | Status         |
 | ---------------------------------- | -------------- |
-| On/Off relay control               | ✅ Ready       |
-| Brightness dimming (PWM)           | ✅ Ready       |
-| Flutter mobile app (iOS + Android) | ✅ Ready       |
-| Local MQTT broker (Mosquitto)      | ✅ Ready       |
-| mDNS auto-discovery (no IP setup)  | ✅ Ready       |
-| OTA firmware updates               | ✅ Ready       |
-| BLE provisioning (Wi-Fi setup)     | 🔄 In progress |
-| Scheduling & automations           | 🔄 In progress |
+| On/Off relay control               | 🔄 InProgress  |
+| Brightness dimming (PWM)           | 🔄 InProgress  |
+| Flutter mobile app (iOS + Android) | 🔄 InProgress  |
+| Local MQTT broker (Mosquitto)      | 🔄 InProgress  |
+| mDNS auto-discovery (no IP setup)  | 📋 Planned     |
+| OTA firmware updates               | 📋 Planned     |
+| BLE provisioning (Wi-Fi setup)     | 📋 Planned     |
+| Scheduling & automations           | 📋 Planned     |
 | Home Assistant integration         | 📋 Planned     |
 | Matter / Thread support            | 📋 Planned     |
 
