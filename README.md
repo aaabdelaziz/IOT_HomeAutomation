@@ -134,8 +134,14 @@ mosquitto_sub -h localhost -t "home/#" -v
 ---
 
 ### 3 — Run the Mobile App
+The mobile app is built with **Flutter** and supports both **iOS and Android** from a single codebase.
 
-Requirements: [Flutter SDK 3.x](https://flutter.dev/docs/get-started/install)
+#### Requirements
+- Flutter SDK 3.x
+- Dart SDK (included with Flutter)
+- Android Studio / Xcode (for device emulation or deployment)
+
+Install Flutter: https://flutter.dev/docs/get-started/install
 
 ```bash
 cd mobile
