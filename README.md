@@ -215,13 +215,12 @@ See [Security Guide](docs/security.md) for full setup instructions.
 
 Full documentation lives in the [project Wiki](../../wiki):
 
-- [System Architecture](../../wiki/System-Architecture)
-- [Hardware Wiring Guide](../../wiki/Hardware-Wiring)
-- [Communication Protocols](../../wiki/Protocols)
-- [Mobile App Guide](../../wiki/Mobile-App)
-- [Broker Setup](../../wiki/Broker-Setup)
-- [Security Guide](../../wiki/Security)
-- [Troubleshooting](../../wiki/Troubleshooting)
+- [System Architecture](../../wiki#2-system-architecture)
+- [Hardware Wiring Guide](../../wiki#3-hardware--esp32-embedded-controller)
+- [Communication Protocols](../../wiki#4-communication-protocols)
+- [Mobile App Guide](../../wiki#6-mobile-application)
+- [Broker Setup](../../wiki#5-backend--broker-infrastructure)
+- [Security Guide](../../wiki#7-security)
 
 ---
 
