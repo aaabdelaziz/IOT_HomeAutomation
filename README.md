@@ -29,14 +29,9 @@ SmartHome Lamp Controller lets you control the lights in your home using a **mob
 
 ---
 
-## Demo
+## System Architecture
 
-```
-Mobile App  ──MQTT/TLS──►  Broker (local Pi / cloud)  ──MQTT──►  ESP32  ──GPIO──►  Relay  ──►  Lamp
-                                                                    ▲
-                                                              Physical button
-                                                             (manual override)
-```
+![Advanced IoT System Architecture](imags/system_arc.png)
 
 ---
 
