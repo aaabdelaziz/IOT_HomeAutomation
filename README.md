@@ -39,7 +39,7 @@ SmartHome Lamp Controller lets you control the lights in your home using a **mob
 
 | Feature                            | Status         |
 | ---------------------------------- | -------------- |
-| On/Off relay control               | 🔄 In progress |
+| On/Off relay control               | ✅ Ready       |
 | Brightness dimming (PWM)           | 📋 Planned     |
 | Flutter mobile app (iOS + Android) | 🔄 In progress |
 | Local MQTT broker (Mosquitto)      | ✅ Ready       |
