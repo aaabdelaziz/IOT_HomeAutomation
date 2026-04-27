@@ -94,12 +94,13 @@ static constexpr uint8_t QUEUE_LIGHT_DEPTH = 10;
 // ─────────────────────────────────────────────────────────────────────────────
 // FreeRTOS task stack sizes (words)
 // ─────────────────────────────────────────────────────────────────────────────
-static constexpr uint32_t STACK_TEMP_READ    = 2048;
-static constexpr uint32_t STACK_AUTO_FAN     = 2048;
-static constexpr uint32_t STACK_LIGHT_READ   = 1024;
-static constexpr uint32_t STACK_AUTO_LIGHT   = 1024;
-static constexpr uint32_t STACK_SMOKE        = 1024;
-static constexpr uint32_t STACK_TOUCH        = 1024;
+static constexpr uint32_t STACK_TEMP_READ    = 4096;
+static constexpr uint32_t STACK_AUTO_FAN     = 4096;
+static constexpr uint32_t STACK_LIGHT_READ   = 4096;
+static constexpr uint32_t STACK_AUTO_LIGHT   = 4096;
+static constexpr uint32_t STACK_SMOKE        = 4096;
+static constexpr uint32_t STACK_TOUCH        = 4096;
+static constexpr uint32_t STACK_ULTRASONIC   = 4096;
 static constexpr uint32_t STACK_SWITCH_CTRL  = 4096;
 static constexpr uint32_t STACK_OLED         = 8192;
 
