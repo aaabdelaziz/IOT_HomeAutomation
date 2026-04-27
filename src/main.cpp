@@ -18,6 +18,7 @@
 
 #include "Config.h"
 #include "SystemState.h"
+#include "BluetoothManager.h"
 
 #include "LightSensor.h"
 #include "LightController.h"
@@ -49,6 +50,7 @@ void setup() {
 
     // 1. Core Initialisation
     SharedState::init();
+    BluetoothManager::instance().begin();
 
     // 2. Create FreeRTOS Queues
     lightQueue   = xQueueCreate(QUEUE_LIGHT_DEPTH, sizeof(int));
