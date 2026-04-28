@@ -11,5 +11,6 @@ firmware/.pio
 .DS_Store
 
 .pio
+.vscode
 # ── Large binary archives (not needed in git) ──────────────────────────────────
 *.zip
