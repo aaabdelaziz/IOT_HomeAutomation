@@ -35,7 +35,7 @@ This is a modular, object-oriented C++ firmware for the ESP32 that turns it into
 
 ## System Architecture
 
-![ESP32 Smart Home Automation — System Architecture](imags/system_arc.png)
+![ESP32 Smart Home Automation — System Architecture](firmware/imags/system_arc.png)
 
 ---
 
@@ -147,37 +147,42 @@ The `SystemState` struct holds:
 ## Repository Structure
 
 ```
-IOT_HomeAutomation/
-├── include/                   # Class headers & config
-│   ├── Config.h               # All GPIO pins, thresholds, stack sizes
-│   ├── SystemState.h          # Thread-safe shared state singleton
-│   ├── BluetoothManager.h     # Classic BT SPP singleton
-│   ├── TemperatureSensor.h    # DHT11 driver
-│   ├── FanController.h        # Fan relay (auto + manual)
-│   ├── LightSensor.h          # LDR driver
-│   ├── LightController.h      # Bulb relay (auto + manual)
-│   ├── SmokeSensor.h          # MQ-2 driver + alert outputs
-│   ├── TouchSensor.h          # Capacitive touch + alert outputs
-│   ├── UltrasonicSensor.h     # HC-SR04 driver + presence LED
-│   ├── OLEDDisplay.h          # SSD1306 dashboard
-│   ├── SwitchController.h     # BT command parser & mode switcher
-│   └── Icons.h                # PROGMEM icon bitmaps for OLED
-├── src/                       # Class implementations
-│   ├── main.cpp               # setup() / loop() — bootstrap & task creation
-│   ├── SystemState.cpp
-│   ├── BluetoothManager.cpp
-│   ├── TemperatureSensor.cpp
-│   ├── FanController.cpp
-│   ├── LightSensor.cpp
-│   ├── LightController.cpp
-│   ├── SmokeSensor.cpp
-│   ├── TouchSensor.cpp
-│   ├── UltrasonicSensor.cpp
-│   ├── OLEDDisplay.cpp
-│   └── SwitchController.cpp
-├── imags/                     # Architecture diagrams & images
-├── platformio.ini             # Build configuration
-└── ImageDrawer.py             # Helper script for OLED bitmap generation
+IOT_HomeAutomation/               ← repo root
+├── firmware/                     ← ESP32 embedded code (PlatformIO project)
+│   ├── src/                      # Class implementations
+│   │   ├── main.cpp              # setup() / loop() — bootstrap & task creation
+│   │   ├── SystemState.cpp
+│   │   ├── BluetoothManager.cpp
+│   │   ├── TemperatureSensor.cpp
+│   │   ├── FanController.cpp
+│   │   ├── LightSensor.cpp
+│   │   ├── LightController.cpp
+│   │   ├── SmokeSensor.cpp
+│   │   ├── TouchSensor.cpp
+│   │   ├── UltrasonicSensor.cpp
+│   │   ├── OLEDDisplay.cpp
+│   │   └── SwitchController.cpp
+│   ├── include/                  # Class headers & config
+│   │   ├── Config.h              # All GPIO pins, thresholds, stack sizes
+│   │   ├── SystemState.h         # Thread-safe shared state singleton
+│   │   ├── BluetoothManager.h    # Classic BT SPP singleton
+│   │   ├── TemperatureSensor.h   # DHT11 driver
+│   │   ├── FanController.h       # Fan relay (auto + manual)
+│   │   ├── LightSensor.h         # LDR driver
+│   │   ├── LightController.h     # Bulb relay (auto + manual)
+│   │   ├── SmokeSensor.h         # MQ-2 driver + alert outputs
+│   │   ├── TouchSensor.h         # Capacitive touch + alert outputs
+│   │   ├── UltrasonicSensor.h    # HC-SR04 driver + presence LED
+│   │   ├── OLEDDisplay.h         # SSD1306 dashboard
+│   │   ├── SwitchController.h    # BT command parser & mode switcher
+│   │   └── Icons.h               # PROGMEM icon bitmaps for OLED
+│   ├── imags/                    # Architecture diagrams & images
+│   ├── platformio.ini            # PlatformIO build configuration
+│   └── ImageDrawer.py            # Helper script for OLED bitmap generation
+├── mobile/                       ← future mobile companion app
+│   └── README.md                 # BT protocol docs + planned Flutter stack
+├── README.md                     ← project overview (this file)
+└── LICENSE
 ```
 
 ---
@@ -188,7 +193,7 @@ IOT_HomeAutomation/
 
 ```bash
 git clone https://github.com/aaabdelaziz/IOT_HomeAutomation.git
-cd IOT_HomeAutomation
+cd IOT_HomeAutomation/firmware
 pio run --target upload
 pio device monitor --baud 115200
 ```
