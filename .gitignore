@@ -10,5 +10,6 @@ firmware/.pio
 # ── macOS metadata ─────────────────────────────────────────────────────────────
 .DS_Store
 
+.pio
 # ── Large binary archives (not needed in git) ──────────────────────────────────
 *.zip
