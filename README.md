@@ -11,7 +11,7 @@
 **Multi-sensor home automation firmware — temperature, light, smoke, touch & presence monitoring with relay control and a live OLED dashboard.**  
 Built on ESP32-WROOM, FreeRTOS, and Bluetooth Classic SPP. Fully local — no cloud dependency.
 
-[🐛 Report Bug](../../issues) · [✨ Request Feature](../../issues) · [🚀 Releases](../../releases)
+[📖 Wiki Documentation](docs/wiki/Home.md) · [🐛 Report Bug](../../issues) · [✨ Request Feature](../../issues) · [🚀 Releases](../../releases)
 
 </div>
 
@@ -247,6 +247,15 @@ pio device monitor --baud 115200
 | Auto / Manual / Off mode switching | ✅ Ready |
 | Thread-safe SharedState via FreeRTOS mutex | ✅ Ready |
 | OTA firmware updates | 📋 Planned |
+
+---
+
+## Documentation
+
+Full project documentation is available in the **[Project Wiki](docs/wiki/Home.md)**, including:
+- [System Architecture](docs/wiki/System-Architecture.md)
+- [Hardware Wiring Guide](docs/wiki/Hardware-Wiring.md)
+- [Communication Protocols (Bluetooth SPP)](docs/wiki/Communication-Protocols.md)
 
 ---
 
