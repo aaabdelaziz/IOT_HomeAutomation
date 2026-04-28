@@ -11,7 +11,7 @@
 **Multi-sensor home automation firmware — temperature, light, smoke, touch & presence monitoring with relay control and a live OLED dashboard.**  
 Built on ESP32-WROOM, FreeRTOS, and Bluetooth Classic SPP. Fully local — no cloud dependency.
 
-[📖 Wiki Documentation](docs/wiki/Home.md) · [🐛 Report Bug](../../issues) · [✨ Request Feature](../../issues) · [🚀 Releases](../../releases)
+[📖 Wiki Documentation](https://github.com/aaabdelaziz/IOT_HomeAutomation/wiki) · [🐛 Report Bug](../../issues) · [✨ Request Feature](../../issues) · [🚀 Releases](../../releases)
 
 </div>
 
