@@ -1,5 +1,7 @@
 # System Architecture
 
+![System Architecture Diagram](../../firmware/imags/system_arc.png)
+
 The ESP32 Smart Home Automation firmware is built using a professional, modular C++ architecture heavily leveraging FreeRTOS for concurrency.
 
 ## Core Concepts
