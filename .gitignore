@@ -9,7 +9,7 @@ firmware/.pio
 
 # ── macOS metadata ─────────────────────────────────────────────────────────────
 .DS_Store
-
+.*
 .pio
 .vscode
 # ── Large binary archives (not needed in git) ──────────────────────────────────
