@@ -41,7 +41,7 @@ This is a modular, object-oriented C++ firmware for the ESP32 that turns it into
 
 ## Hardware
 
-![Hardware Connection Map](firmware/imags/hardware_pinout.png)
+![Hardware Connection Map](firmware/imags/hardware_pinout.jpeg)
 
 ### Sensors
 

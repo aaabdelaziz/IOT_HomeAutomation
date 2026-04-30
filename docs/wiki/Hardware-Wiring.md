@@ -2,7 +2,7 @@
 
 This document maps all the physical connections required between the ESP32 and the various sensors and actuators used in the Smart Home Automation project.
 
-![Hardware Connection Map](../../firmware/imags/hardware_pinout.png)
+![Hardware Connection Map](../../firmware/imags/hardware_pinout.jpeg)
 
 > [!IMPORTANT]
 > All pin assignments are centrally defined in the codebase in `firmware/include/Config.h`. If you change the wiring on your physical breadboard/PCB, you only need to update that single file.
