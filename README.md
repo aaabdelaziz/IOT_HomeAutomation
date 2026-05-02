@@ -1,16 +1,17 @@
 <div align="center">
 
-<img src="https://img.shields.io/badge/ESP32-Embedded-E7352C?style=for-the-badge&logo=espressif&logoColor=white"/>
-<img src="https://img.shields.io/badge/Flutter-Mobile_App-02569B?style=for-the-badge&logo=flutter&logoColor=white"/>
-<img src="https://img.shields.io/badge/MQTT-Protocol-660066?style=for-the-badge&logo=eclipse-mosquitto&logoColor=white"/>
+<img src="https://img.shields.io/badge/ESP32-FreeRTOS-E7352C?style=for-the-badge&logo=espressif&logoColor=white"/>
+<img src="https://img.shields.io/badge/C++-OOP_Firmware-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white"/>
+<img src="https://img.shields.io/badge/Bluetooth-Classic_SPP-0082FC?style=for-the-badge&logo=bluetooth&logoColor=white"/>
+<img src="https://img.shields.io/badge/PlatformIO-Build_System-FF7F00?style=for-the-badge&logo=platformio&logoColor=white"/>
 <img src="https://img.shields.io/badge/License-MIT-22c55e?style=for-the-badge"/>
 
-# 💡 SmartHome Lamp Controller
+# 🏠 ESP32 Smart Home Automation
 
-**Open-source IoT home automation — control every lamp in your home from your phone.**  
-Built on ESP32, Flutter, and MQTT. Works locally, works remotely, works offline.
+**Multi-sensor home automation firmware — temperature, light, smoke, touch & presence monitoring with relay control and a live OLED dashboard.**  
+Built on ESP32-WROOM, FreeRTOS, and Bluetooth Classic SPP. Fully local — no cloud dependency.
 
-[📖 Wiki](../../wiki) · [🐛 Report Bug](../../issues) · [✨ Request Feature](../../issues) · [🚀 Releases](../../releases)
+[📖 Wiki Documentation](https://github.com/aaabdelaziz/IOT_HomeAutomation/wiki) · [🐛 Report Bug](../../issues) · [✨ Request Feature](../../issues) · [🚀 Releases](../../releases)
 
 </div>
 
@@ -18,237 +19,251 @@ Built on ESP32, Flutter, and MQTT. Works locally, works remotely, works offline.
 
 ## What is this?
 
-SmartHome Lamp Controller lets you control the lights in your home using a **mobile app** (iOS & Android) and **ESP32 microcontrollers** wired to your lamp circuits. Everything communicates over **MQTT** — a lightweight protocol designed for embedded devices.
+This is a modular, object-oriented C++ firmware for the ESP32 that turns it into a full home automation hub. Each sensor and actuator runs as an **independent FreeRTOS task**, communicating through thread-safe queues and a mutex-protected shared state. A paired mobile app sends Bluetooth SPP commands to switch between **automatic mode** (sensor-driven) and **manual mode** (app-driven).
 
-- Turn lamps on/off individually or by room
-- Dim lights with PWM brightness control
-- Schedule automations (wake-up light, bedtime routine)
-- Works **fully local** — no cloud required
-- Optional **remote access** via encrypted cloud broker
-- Compatible with **Home Assistant**
+### Key capabilities
 
----
-
-## Demo
-
-```
-Mobile App  ──MQTT/TLS──►  Broker (local Pi / cloud)  ──MQTT──►  ESP32  ──GPIO──►  Relay  ──►  Lamp
-                                                                    ▲
-                                                              Physical button
-                                                             (manual override)
-```
+- 🌡️ **Temperature monitoring** — DHT11 triggers the fan relay automatically above threshold
+- 💡 **Ambient light sensing** — LDR turns the bulb relay on in the dark automatically
+- 🔥 **Smoke / gas detection** — MQ-2 fires buzzer + LED alert, notifies the app
+- 👆 **Touch / intrusion sensing** — ESP32 capacitive touch triggers a security buzzer + LED
+- 📡 **Ultrasonic presence detection** — HC-SR04 lights a presence LED when an object is close
+- 📺 **OLED live dashboard** — SSD1306 128×64 shows temperature + five status icons
+- 📱 **Bluetooth SPP control** — switch Auto/Manual/Off mode and control relays from a phone
 
 ---
 
-## Features
+## System Architecture
 
-| Feature                            | Status         |
-| ---------------------------------- | -------------- |
-| On/Off relay control               | 🔄 InProgress  |
-| Brightness dimming (PWM)           | 🔄 InProgress  |
-| Flutter mobile app (iOS + Android) | 🔄 InProgress  |
-| Local MQTT broker (Mosquitto)      | 🔄 InProgress  |
-| mDNS auto-discovery (no IP setup)  | 📋 Planned     |
-| OTA firmware updates               | 📋 Planned     |
-| BLE provisioning (Wi-Fi setup)     | 📋 Planned     |
-| Scheduling & automations           | 📋 Planned     |
-| Home Assistant integration         | 📋 Planned     |
-| Matter / Thread support            | 📋 Planned     |
+![ESP32 Smart Home Automation — System Architecture](firmware/imags/system_arc.png)
 
 ---
 
-## Hardware Requirements
+## Hardware
 
-| Component         | Example                  | Notes                |
-| ----------------- | ------------------------ | -------------------- |
-| Microcontroller   | ESP32-DevKitC            | Wi-Fi + BLE built-in |
-| Relay module      | 4-channel 5V relay board | Switches mains lamps |
-| Dimmer (optional) | RobotDyn AC Dimmer       | PWM brightness       |
-| Power supply      | HLK-PM01 5V/3W           | Mains → 3.3V         |
-| Status LED        | WS2812B NeoPixel         | Visual feedback      |
+![Hardware Connection Map](firmware/imags/hardware_pinout.jpeg)
 
-> ⚠️ **Safety Warning:** This project involves mains voltage (110V/230V AC). Work with AC circuits only if you are qualified. Always disconnect power before wiring.
+### Sensors
+
+| Sensor | Component | GPIO | Notes |
+|---|---|---|---|
+| Temperature & Humidity | DHT11 | GPIO 33 | 2-second polling |
+| Ambient Light | LDR (analogue) | GPIO 26 | ADC input |
+| Smoke / Gas | MQ-2 (analogue) | GPIO 25 | ADC input |
+| Touch / Intrusion | ESP32 Cap. Touch | GPIO 4 (T0) | Threshold: < 20 counts |
+| Ultrasonic Presence | HC-SR04 | Trig: GPIO 15 / Echo: GPIO 2 | Presence threshold: 20 cm |
+
+### Actuators & Outputs
+
+| Actuator / Output | GPIO | Notes |
+|---|---|---|
+| Fan relay | GPIO 17 | Active-high relay |
+| Light (bulb) relay | GPIO 16 | Active-high relay |
+| Smoke buzzer | GPIO 14 | Fires when MQ-2 ADC > 3200 |
+| Smoke alert LED | GPIO 5 | Mirrors smoke buzzer |
+| Touch/intrusion buzzer | GPIO 27 | Fires on touch detection |
+| Touch alert LED | GPIO 19 | Mirrors touch buzzer |
+| Ultrasonic presence LED | GPIO 18 | On when object within range |
+| OLED SSD1306 128×64 | I²C — 0x3C | Shows temp + 5 status icons |
+
+> ⚠️ **Safety Warning:** Fan and light relays may switch mains voltage (110 V / 230 V AC). Work with AC circuits only if you are qualified. Always disconnect power before wiring.
 
 ---
 
-## Quick Start
+## FreeRTOS Task Map
 
-### 1 — Flash the ESP32
+| Task name | Class | Stack | Mode | Description |
+|---|---|---|---|---|
+| `TempRead` | `TemperatureSensor` | 4 096 | Always | Reads DHT11 every 2 s; pushes to `tempQueue` & `displayQueue` |
+| `AutoFan` | `FanController` | 4 096 | **Suspendable** | Reads `tempQueue`; energises fan relay above 33 °C |
+| `LightRead` | `LightSensor` | 4 096 | Always | Reads LDR every 2 s; pushes to `lightQueue` |
+| `AutoLight` | `LightController` | 4 096 | **Suspendable** | Reads `lightQueue`; energises bulb relay below ADC 2200 |
+| `SmokeDet` | `SmokeSensor` | 4 096 | Always | Reads MQ-2 every 1 s; fires buzzer+LED+BT alert |
+| `TouchDet` | `TouchSensor` | 4 096 | Always | Polls cap. touch; fires buzzer+LED+BT alert |
+| `Ultrasonic` | `UltrasonicSensor` | 4 096 | Always | Pulses HC-SR04; lights presence LED; BT alert |
+| `OLED` | `OLEDDisplay` | 8 192 | Always | Refreshes 128×64 dashboard at 5 Hz |
+| `SwitchCtrl` | `SwitchController` | 4 096 | Always | Parses BT SPP commands; manages auto-task suspend/resume |
 
-```bash
-git clone https://github.com/your-org/iot-home-automation.git
-cd iot-home-automation/firmware
-```
+> **Default mode at boot:** `AutoFan` and `AutoLight` are suspended — system starts in **Manual mode**.
 
-Copy the example config and fill in your details:
+---
 
-```bash
-cp include/config.example.h include/config.h
-```
+## Bluetooth SPP Protocol
 
-Edit `config.h`:
+All messages from the ESP32 end with the `?` delimiter so the app parser can split the stream.
+
+### ESP32 → Mobile App
+
+| Message | Meaning |
+|---|---|
+| `#<value>?` | Temperature reading in °C |
+| `Fan on?` / `Fan off?` | Fan relay state changed |
+| `Bulb on?` / `Bulb off?` | Light relay state changed |
+| `Smoke active?` / `Smoke inactive?` | Smoke/gas alarm state |
+| `Touch active?` / `Touch inactive?` | Intrusion alarm state |
+| `Ultrasonic active?` / `Ultrasonic inactive?` | Presence detection state |
+
+### Mobile App → ESP32
+
+| Command char | Effect |
+|---|---|
+| `A` | **Automatic mode** — resume AutoFan + AutoLight tasks |
+| `M` | **Manual mode** — suspend AutoFan + AutoLight tasks |
+| `O` | **Off mode** — suspend auto tasks, turn both relays off |
+| `F` | Fan ON (manual) |
+| `Y` | Fan OFF (manual) |
+| `L` | Light ON (manual) |
+| `Z` | Light OFF (manual) |
+| `T` | Clear touch alarm |
+
+---
+
+## Shared State & Thread Safety
+
+All tasks read/write sensor values through `SharedState` — a mutex-protected singleton:
 
 ```cpp
-#define WIFI_SSID      "YourNetworkName"
-#define WIFI_PASSWORD  "YourPassword"
-#define MQTT_HOST      "192.168.1.100"   // Your broker IP
-#define MQTT_PORT      8883
-#define MQTT_USER      "lamp_001"
-#define MQTT_PASS      "your_device_password"
-#define DEVICE_ID      "lamp_001"
-#define ROOM           "living_room"
+// Writer (sensor task)
+SharedState::update([](SystemState& s){ s.temperature = 27; });
+
+// Reader (OLED / BT task)
+SystemState snap = SharedState::snapshot();
 ```
 
-Flash with PlatformIO:
+The `SystemState` struct holds:
 
-```bash
-pio run --target upload
-```
-
-Or open in Arduino IDE and click **Upload**.
-
----
-
-### 2 — Start the MQTT Broker
-
-**With Docker (easiest):**
-
-```bash
-cd broker
-docker compose up -d
-```
-
-**Manually on Raspberry Pi / Linux:**
-
-```bash
-sudo apt install -y mosquitto mosquitto-clients
-sudo systemctl enable --now mosquitto
-```
-
-Test it works:
-
-```bash
-mosquitto_sub -h localhost -t "home/#" -v
-```
-
----
-
-### 3 — Run the Mobile App
-The mobile app is built with **Flutter** and supports both **iOS and Android** from a single codebase.
-
-#### Requirements
-- Flutter SDK 3.x
-- Dart SDK (included with Flutter)
-- Android Studio / Xcode (for device emulation or deployment)
-
-Install Flutter: https://flutter.dev/docs/get-started/install
-
-```bash
-cd mobile
-flutter pub get
-flutter run
-```
-
-The app auto-discovers your broker on the local network via mDNS. No IP address needed.
-
----
-
-## MQTT Topic Structure
-
-```
-home/{room}/{device_id}/command    →  App sends commands to ESP32
-home/{room}/{device_id}/state      →  ESP32 reports current state
-home/{room}/{device_id}/status     →  ESP32 online/offline (LWT)
-```
-
-**Command payload (App → ESP32):**
-
-```json
-{ "action": "set", "state": "ON", "brightness": 75 }
-```
-
-**State payload (ESP32 → App):**
-
-```json
-{ "state": "ON", "brightness": 75, "uptime": 3600, "rssi": -58 }
-```
+| Field | Type | Description |
+|---|---|---|
+| `fanActive` | `bool` | Fan relay energised |
+| `lightActive` | `bool` | Bulb relay energised |
+| `smokeDetected` | `bool` | MQ-2 threshold exceeded |
+| `touchDetected` | `bool` | Capacitive touch active |
+| `presenceDetected` | `bool` | Object within ultrasonic range |
+| `temperature` | `int` | Latest DHT11 reading (°C) |
+| `lightLevel` | `int` | Latest LDR ADC reading |
+| `smokeLevel` | `int` | Latest MQ-2 ADC reading |
+| `distanceCm` | `int` | Latest ultrasonic reading (cm) |
 
 ---
 
 ## Repository Structure
 
 ```
-iot-home-automation/
-├── firmware/          # ESP32 C++ source (Arduino / PlatformIO)
-│   ├── src/
-│   └── include/
-├── mobile/            # Flutter app (iOS + Android)
-│   └── lib/
-├── broker/            # Mosquitto config + Docker Compose
-└── docs/              # Extra docs, wiring diagrams
+IOT_HomeAutomation/                   ← repo root
+├── firmware/                         ← ESP32 PlatformIO project
+│   ├── lib/                          # Per-component libraries (auto-discovered)
+│   │   ├── TemperatureSensor/        # DHT11 driver
+│   │   │   ├── TemperatureSensor.h
+│   │   │   └── TemperatureSensor.cpp
+│   │   ├── FanController/            # Fan relay (auto + manual)
+│   │   │   ├── FanController.h
+│   │   │   └── FanController.cpp
+│   │   ├── LightSensor/              # LDR driver
+│   │   │   ├── LightSensor.h
+│   │   │   └── LightSensor.cpp
+│   │   ├── LightController/          # Bulb relay (auto + manual)
+│   │   │   ├── LightController.h
+│   │   │   └── LightController.cpp
+│   │   ├── SmokeSensor/              # MQ-2 driver + alert outputs
+│   │   │   ├── SmokeSensor.h
+│   │   │   └── SmokeSensor.cpp
+│   │   ├── TouchSensor/              # Capacitive touch + alert outputs
+│   │   │   ├── TouchSensor.h
+│   │   │   └── TouchSensor.cpp
+│   │   ├── UltrasonicSensor/         # HC-SR04 driver + presence LED
+│   │   │   ├── UltrasonicSensor.h
+│   │   │   └── UltrasonicSensor.cpp
+│   │   ├── OLEDDisplay/              # SSD1306 dashboard + icon bitmaps
+│   │   │   ├── OLEDDisplay.h
+│   │   │   ├── OLEDDisplay.cpp
+│   │   │   └── Icons.h
+│   │   ├── BluetoothManager/         # Classic BT SPP singleton
+│   │   │   ├── BluetoothManager.h
+│   │   │   └── BluetoothManager.cpp
+│   │   └── SwitchController/         # BT command parser & mode switcher
+│   │       ├── SwitchController.h
+│   │       └── SwitchController.cpp
+│   ├── src/                          # Application entry point
+│   │   ├── main.cpp                  # setup() / loop() — bootstrap & tasks
+│   │   └── SystemState.cpp           # SharedState static definitions
+│   ├── include/                      # Shared / cross-cutting headers
+│   │   ├── Config.h                  # All GPIO pins, thresholds, stack sizes
+│   │   └── SystemState.h             # Thread-safe shared state singleton
+│   ├── imags/                        # Architecture diagrams & images
+│   ├── platformio.ini                # PlatformIO build configuration
+│   └── ImageDrawer.py                # Helper script for OLED bitmap generation
+├── mobile/                           ← future mobile companion app
+│   └── README.md                     # BT protocol docs + planned Flutter stack
+├── README.md                         ← project overview (this file)
+└── LICENSE
 ```
+
+---
+
+## Quick Start
+
+### Flash with PlatformIO
+
+```bash
+git clone https://github.com/aaabdelaziz/IOT_HomeAutomation.git
+cd IOT_HomeAutomation/firmware
+pio run --target upload
+pio device monitor --baud 115200
+```
+
+### Pair the mobile app
+
+1. Power on the ESP32 — it advertises as **`SmartHome-ESP32`** over Bluetooth Classic.
+2. Pair from your phone's Bluetooth settings.
+3. Open a Bluetooth SPP terminal app and connect.
+4. Send `A` to enable automatic mode or `M` for manual mode.
 
 ---
 
 ## Tech Stack
 
-| Layer                | Technology                                |
-| -------------------- | ----------------------------------------- |
-| Embedded firmware    | C++ · Arduino framework · PlatformIO      |
-| Microcontroller      | ESP32 (Espressif)                         |
-| Primary protocol     | MQTT over TLS (Mosquitto / EMQX / HiveMQ) |
-| Local discovery      | mDNS / DNS-SD                             |
-| Initial provisioning | BLE (Bluetooth Low Energy)                |
-| Firmware updates     | HTTP OTA                                  |
-| Mobile app           | Flutter 3 · Dart                          |
-| MQTT client (mobile) | `mqtt_client` package                     |
+| Layer | Technology |
+|---|---|
+| Microcontroller | ESP32-WROOM (Espressif) |
+| RTOS | FreeRTOS (built into Arduino-ESP32) |
+| Firmware language | C++17 · Arduino framework |
+| Build system | PlatformIO |
+| Wireless | Bluetooth Classic SPP (`BluetoothSerial`) |
+| Temperature sensor | DHT11 (DHT library) |
+| Display | SSD1306 OLED — Adafruit GFX + SSD1306 |
+| Inter-task comms | FreeRTOS Queues + Mutex-protected SharedState |
 
 ---
 
-## Security
+## Features
 
-- TLS encryption on all MQTT traffic (port 8883)
-- Username/password auth per device
-- Per-device topic ACLs (devices can only publish their own state)
-- Wi-Fi credentials stored in ESP32 NVS (not compiled into firmware)
-- BLE pairing for initial provisioning only
-
-See [Security Guide](docs/security.md) for full setup instructions.
+| Feature | Status |
+|---|---|
+| DHT11 temperature monitoring → fan auto-control | ✅ Ready |
+| LDR light sensing → bulb auto-control | ✅ Ready |
+| MQ-2 smoke/gas detection + buzzer & LED alert | ✅ Ready |
+| ESP32 capacitive touch intrusion detection + alert | ✅ Ready |
+| HC-SR04 ultrasonic presence detection + LED | ✅ Ready |
+| SSD1306 128×64 OLED live dashboard | ✅ Ready |
+| Bluetooth Classic SPP command interface | ✅ Ready |
+| Auto / Manual / Off mode switching | ✅ Ready |
+| Thread-safe SharedState via FreeRTOS mutex | ✅ Ready |
+| OTA firmware updates | 📋 Planned |
 
 ---
 
 ## Documentation
 
-Full documentation lives in the [project Wiki](../../wiki):
-
-- [System Architecture](../../wiki/System-Architecture)
-- [Hardware Wiring Guide](../../wiki/Hardware-Wiring)
-- [Communication Protocols](../../wiki/Protocols)
-- [Mobile App Guide](../../wiki/Mobile-App)
-- [Broker Setup](../../wiki/Broker-Setup)
-- [Security Guide](../../wiki/Security)
-- [Troubleshooting](../../wiki/Troubleshooting)
-
----
-
-## Contributing
-
-Contributions are very welcome! Please open an **issue** first to discuss what you'd like to change.
-
-```bash
-# Fork → clone → branch → PR
-git checkout -b feature/my-feature
-git commit -m "feat: add my feature"
-git push origin feature/my-feature
-```
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+Full project documentation is available in the **[Project Wiki](docs/wiki/Home.md)**, including:
+- [System Architecture](docs/wiki/System-Architecture.md)
+- [Hardware Wiring Guide](docs/wiki/Hardware-Wiring.md)
+- [Communication Protocols (Bluetooth SPP)](docs/wiki/Communication-Protocols.md)
 
 ---
 
 ## License
 
-MIT © 2026 — SmartHome Contributors. See [LICENSE](LICENSE) for details.
+MIT © 2026 — Ahmed Abdelaziz. See [LICENSE](LICENSE) for details.
 
 ---
 
