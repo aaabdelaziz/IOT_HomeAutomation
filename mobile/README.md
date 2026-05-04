@@ -1,4 +1,4 @@
-# 📱 Mobile Application
+# 📱 Smart Home Mobile Application
 
 > **Status:** Planned — not yet implemented.
 
